@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA 아이콘 생성기</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA 아이콘 생성기</h1>
+    <p>버튼을 클릭하면 자동으로 아이콘이 다운로드됩니다.</p>
+
+    <button onclick="generateIcon(192)">192x192 아이콘 생성</button>
+    <button onclick="generateIcon(512)">512x512 아이콘 생성</button>
+
+    <div id="preview"></div>
+
+    <script>
+        function generateIcon(size) {
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Blue background
+            ctx.fillStyle = '#2563eb';
+            ctx.fillRect(0, 0, size, size);
+
+            // White text
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Font size
+            const fontSize = Math.floor(size / 3);
+            ctx.font = `bold ${fontSize}px sans-serif`;
+
+            // Draw text
+            ctx.fillText('동아리', size / 2, size / 2);
+
+            // Show preview
+            const preview = document.getElementById('preview');
+            preview.innerHTML = `<h3>${size}x${size}</h3>`;
+            canvas.style.width = '200px';
+            canvas.style.height = '200px';
+            preview.appendChild(canvas.cloneNode(true));
+
+            // Download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}x${size}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                alert(`✅ icon-${size}x${size}.png 다운로드 완료!\n\n다운로드된 파일을 public/icons/ 폴더에 넣어주세요.`);
+            }, 'image/png');
+        }
+    </script>
+</body>
+</html>
