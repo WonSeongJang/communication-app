@@ -154,20 +154,6 @@ export function PostDetailPage() {
             {selectedPost.content}
           </div>
         </div>
-
-        {/* Footer with likes and comments */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex items-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <span aria-label="좋아요" className="text-lg">❤️</span>
-              <span>{selectedPost.likes}개</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span aria-label="댓글" className="text-lg">💬</span>
-              <span>{selectedPost.comment_count}개</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

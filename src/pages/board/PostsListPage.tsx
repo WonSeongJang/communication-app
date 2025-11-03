@@ -81,16 +81,6 @@ export function PostsListPage() {
                     </span>
                     <span>•</span>
                     <span>{formatDate(post.created_at)}</span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <span aria-label="좋아요">❤️</span>
-                      {post.likes}
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <span aria-label="댓글">💬</span>
-                      {post.comment_count}
-                    </span>
                   </div>
                 </div>
               </div>
