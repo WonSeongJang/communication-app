@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDonationStore } from '@/store/donationStore';
+import { useAuthStore } from '@/store/authStore';
 
 export function DonationsPage() {
+  const { user } = useAuthStore();
   const { summary, totalAmount, isLoading, error, fetchDonationsSummary } =
     useDonationStore();
 
@@ -33,12 +36,24 @@ export function DonationsPage() {
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-          후원 내역
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          동문회 발전을 위해 후원해주신 분들입니다.
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              후원 내역
+            </h1>
+            <p className="mt-2 text-sm text-gray-600">
+              동문회 발전을 위해 후원해주신 분들입니다.
+            </p>
+          </div>
+          {user?.role === 'president' && (
+            <Link
+              to="/donations/manage"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              관리
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Total Amount Card */}
