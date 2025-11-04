@@ -21,6 +21,8 @@ export function NoticeCreatePage() {
     content: '',
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Redirect if not president
   if (user?.role !== 'president') {
     navigate('/notices');
@@ -55,9 +57,12 @@ export function NoticeCreatePage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm() || !user) {
+    // Prevent duplicate submissions
+    if (isSubmitting || !validateForm() || !user) {
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       await createNotice(
@@ -88,6 +93,7 @@ export function NoticeCreatePage() {
       navigate('/notices');
     } catch (error) {
       // Error is handled by the store
+      setIsSubmitting(false);
     }
   };
 
@@ -125,7 +131,7 @@ export function NoticeCreatePage() {
             }`}
             placeholder="공지사항 제목을 입력하세요"
             maxLength={100}
-            disabled={isLoading}
+            disabled={isLoading || isSubmitting}
           />
           {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
           <p className="mt-1 text-sm text-gray-500">
@@ -147,7 +153,7 @@ export function NoticeCreatePage() {
             }`}
             placeholder="공지사항 내용을 입력하세요"
             maxLength={5000}
-            disabled={isLoading}
+            disabled={isLoading || isSubmitting}
           />
           {errors.content && <p className="mt-1 text-sm text-red-600">{errors.content}</p>}
           <p className="mt-1 text-sm text-gray-500">
@@ -163,7 +169,7 @@ export function NoticeCreatePage() {
               checked={formData.isPinned}
               onChange={(e) => setFormData({ ...formData, isPinned: e.target.checked })}
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              disabled={isLoading}
+              disabled={isLoading || isSubmitting}
             />
             <span className="text-sm text-gray-700">
               📌 상단 고정 (목록 최상단에 표시됩니다)
@@ -179,7 +185,7 @@ export function NoticeCreatePage() {
               checked={formData.sendPushNotification}
               onChange={(e) => setFormData({ ...formData, sendPushNotification: e.target.checked })}
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              disabled={isLoading}
+              disabled={isLoading || isSubmitting}
             />
             <span className="text-sm text-gray-700">
               🔔 전체 알림 보내기 (알림을 허용한 회원에게 푸시 알림을 전송합니다)
@@ -193,16 +199,16 @@ export function NoticeCreatePage() {
             type="button"
             onClick={handleCancel}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-            disabled={isLoading}
+            disabled={isLoading || isSubmitting}
           >
             취소
           </button>
           <button
             type="submit"
             className="px-6 py-2 bg-blue-600 !text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isLoading}
+            disabled={isLoading || isSubmitting}
           >
-            {isLoading ? '저장 중...' : '저장'}
+            {isLoading || isSubmitting ? '저장 중...' : '저장'}
           </button>
         </div>
       </form>
