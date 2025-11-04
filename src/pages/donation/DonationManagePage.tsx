@@ -219,6 +219,7 @@ export function DonationManagePage() {
                     amount: parseInt(e.target.value, 10) || 0,
                   })
                 }
+                onWheel={(e) => e.currentTarget.blur()}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="10000"
                 min="1"
@@ -313,6 +314,7 @@ export function DonationManagePage() {
                           type="number"
                           value={editAmount}
                           onChange={(e) => setEditAmount(e.target.value)}
+                          onWheel={(e) => e.currentTarget.blur()}
                           className="w-32 px-3 py-1 text-right border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                           min="1"
                         />
@@ -452,6 +454,7 @@ export function DonationManagePage() {
                       type="number"
                       value={editAmount}
                       onChange={(e) => setEditAmount(e.target.value)}
+                      onWheel={(e) => e.currentTarget.blur()}
                       className="flex-1 mr-3 px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                       min="1"
                     />

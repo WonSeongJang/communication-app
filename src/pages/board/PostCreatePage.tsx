@@ -29,8 +29,6 @@ export function PostCreatePage() {
 
     if (!content.trim()) {
       errors.content = '내용을 입력해주세요.';
-    } else if (content.trim().length < 10) {
-      errors.content = '내용은 최소 10자 이상이어야 합니다.';
     }
 
     setValidationErrors(errors);
