@@ -54,7 +54,7 @@ export function NoticesListPage() {
         {user?.role === 'president' && (
           <Link
             to="/notices/new"
-            className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+            className="bg-blue-600 !text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             새 공지 작성
           </Link>
@@ -68,7 +68,7 @@ export function NoticesListPage() {
           {user?.role === 'president' && (
             <Link
               to="/notices/new"
-              className="inline-block mt-4 text-primary-600 hover:text-primary-700"
+              className="inline-block mt-4 text-blue-600 hover:text-blue-700"
             >
               첫 공지사항을 작성해보세요 →
             </Link>
