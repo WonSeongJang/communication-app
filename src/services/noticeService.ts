@@ -182,6 +182,30 @@ class NoticeService {
   }
 
   /**
+   * Search notices by title or content
+   */
+  async searchNotices(query: string): Promise<Notice[]> {
+    try {
+      if (!query.trim()) {
+        return this.getNotices();
+      }
+
+      const { data, error } = await supabase
+        .from('notices')
+        .select('*')
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        .order('is_pinned', { ascending: false })
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('공지사항 검색 실패:', error);
+      throw new Error('공지사항 검색에 실패했습니다.');
+    }
+  }
+
+  /**
    * Get author name for a notice
    */
   async getAuthorName(authorId: string): Promise<string> {

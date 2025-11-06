@@ -15,6 +15,7 @@ interface PostStore {
   // Actions
   fetchPosts: () => Promise<void>;
   fetchPostById: (id: string) => Promise<void>;
+  searchPosts: (query: string) => Promise<void>;
   createPost: (data: CreatePostInput, authorId: string) => Promise<void>;
   updatePost: (id: string, data: UpdatePostInput, userId: string) => Promise<void>;
   deletePost: (id: string, userId: string, userRole: string) => Promise<void>;
@@ -56,6 +57,19 @@ export const usePostStore = create<PostStore>((set, get) => ({
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : '게시글을 불러오는데 실패했습니다.';
+      set({ error: errorMessage, isLoading: false });
+      throw error;
+    }
+  },
+
+  searchPosts: async (query: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      const posts = await postService.searchPosts(query);
+      set({ posts, isLoading: false });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : '게시글 검색에 실패했습니다.';
       set({ error: errorMessage, isLoading: false });
       throw error;
     }

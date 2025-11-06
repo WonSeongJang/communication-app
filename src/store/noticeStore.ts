@@ -15,6 +15,7 @@ interface NoticeStore {
   // Actions
   fetchNotices: () => Promise<void>;
   fetchNoticeById: (id: string, userId: string) => Promise<void>;
+  searchNotices: (query: string) => Promise<void>;
   createNotice: (data: CreateNoticeInput, authorId: string) => Promise<void>;
   updateNotice: (id: string, data: UpdateNoticeInput) => Promise<void>;
   deleteNotice: (id: string) => Promise<void>;
@@ -57,6 +58,19 @@ export const useNoticeStore = create<NoticeStore>((set, get) => ({
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : '공지사항을 불러오는데 실패했습니다.';
+      set({ error: errorMessage, isLoading: false });
+      throw error;
+    }
+  },
+
+  searchNotices: async (query: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      const notices = await noticeService.searchNotices(query);
+      set({ notices, isLoading: false });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : '공지사항 검색에 실패했습니다.';
       set({ error: errorMessage, isLoading: false });
       throw error;
     }

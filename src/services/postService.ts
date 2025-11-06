@@ -178,6 +178,36 @@ class PostService {
       throw new Error(errorMessage);
     }
   }
+
+  /**
+   * Search posts by title or content
+   */
+  async searchPosts(query: string): Promise<PostWithAuthor[]> {
+    try {
+      if (!query.trim()) {
+        return this.getPosts();
+      }
+
+      const { data, error } = await supabase
+        .from('posts')
+        .select(`
+          *,
+          author:users!author_id (
+            id,
+            name,
+            generation
+          )
+        `)
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('게시글 검색 실패:', error);
+      throw new Error('게시글 검색에 실패했습니다.');
+    }
+  }
 }
 
 export const postService = new PostService();
