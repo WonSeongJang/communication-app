@@ -2,11 +2,19 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDonationStore } from '@/store/donationStore';
 import { useAuthStore } from '@/store/authStore';
+import { usePagination } from '@/hooks/usePagination';
+import { Pagination } from '@/components/common/Pagination';
 
 export function DonationsPage() {
   const { user } = useAuthStore();
   const { summary, totalAmount, isLoading, error, fetchDonationsSummary } =
     useDonationStore();
+
+  // Pagination
+  const { currentPage, totalPages, currentItems, handlePageChange } = usePagination({
+    items: summary,
+    itemsPerPage: 10,
+  });
 
   useEffect(() => {
     fetchDonationsSummary();
@@ -89,7 +97,7 @@ export function DonationsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {summary.map((item) => (
+                {currentItems.map((item) => (
                   <tr key={item.donor_id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -121,7 +129,7 @@ export function DonationsPage() {
 
           {/* Mobile Cards */}
           <div className="sm:hidden divide-y divide-gray-200">
-            {summary.map((item) => (
+            {currentItems.map((item) => (
               <div key={item.donor_id} className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -146,6 +154,13 @@ export function DonationsPage() {
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </div>

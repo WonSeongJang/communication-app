@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useApprovalStore } from '@/store/approvalStore';
+import { usePagination } from '@/hooks/usePagination';
+import { Pagination } from '@/components/common/Pagination';
 
 /**
  * PendingUsersTable Component
@@ -41,9 +43,15 @@ export const PendingUsersTable = () => {
     fetchPendingUsers();
   }, [fetchPendingUsers]);
 
+  // Pagination
+  const { currentPage, totalPages, currentItems, handlePageChange } = usePagination({
+    items: pendingUsers,
+    itemsPerPage: 10,
+  });
+
   // Calculate selection state
-  const allSelected = pendingUsers.length > 0 && selectedUserIds.size === pendingUsers.length;
-  const someSelected = selectedUserIds.size > 0 && selectedUserIds.size < pendingUsers.length;
+  const allSelected = currentItems.length > 0 && currentItems.every((user) => selectedUserIds.has(user.id));
+  const someSelected = currentItems.some((user) => selectedUserIds.has(user.id)) && !allSelected;
 
   // Format date to Korean locale
   const formatDate = (dateString: string): string => {
@@ -87,12 +95,22 @@ export const PendingUsersTable = () => {
     }
   };
 
-  // Handle select all toggle
+  // Handle select all toggle (only for current page)
   const handleSelectAll = () => {
     if (allSelected) {
-      clearSelection();
+      // Deselect all on current page
+      currentItems.forEach((user) => {
+        if (selectedUserIds.has(user.id)) {
+          toggleUserSelection(user.id);
+        }
+      });
     } else {
-      selectAll();
+      // Select all on current page
+      currentItems.forEach((user) => {
+        if (!selectedUserIds.has(user.id)) {
+          toggleUserSelection(user.id);
+        }
+      });
     }
   };
 
@@ -221,7 +239,7 @@ export const PendingUsersTable = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {pendingUsers.map((user) => (
+                {currentItems.map((user) => (
                   <tr
                     key={user.id}
                     className={`hover:bg-gray-50 transition-colors ${
@@ -309,6 +327,13 @@ export const PendingUsersTable = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         )}
       </div>
 

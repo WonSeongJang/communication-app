@@ -2,11 +2,19 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNoticeStore } from '@/store/noticeStore';
 import { useAuthStore } from '@/store/authStore';
+import { usePagination } from '@/hooks/usePagination';
+import { Pagination } from '@/components/common/Pagination';
 
 export function NoticesListPage() {
   const { user } = useAuthStore();
   const { notices, isLoading, error, fetchNotices, searchNotices } = useNoticeStore();
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Pagination
+  const { currentPage, totalPages, currentItems, handlePageChange, resetPage } = usePagination({
+    items: notices,
+    itemsPerPage: 10,
+  });
 
   useEffect(() => {
     fetchNotices();
@@ -20,10 +28,11 @@ export function NoticesListPage() {
       } else {
         fetchNotices();
       }
+      resetPage(); // Reset to first page when search changes
     }, 300); // 300ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery, searchNotices, fetchNotices]);
+  }, [searchQuery, searchNotices, fetchNotices, resetPage]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -124,8 +133,10 @@ export function NoticesListPage() {
       {/* Notices List */}
       {notices.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-gray-500 text-lg">아직 공지사항이 없습니다.</p>
-          {user?.role === 'president' && (
+          <p className="text-gray-500 text-lg">
+            {searchQuery ? '검색 결과가 없습니다.' : '아직 공지사항이 없습니다.'}
+          </p>
+          {user?.role === 'president' && !searchQuery && (
             <Link
               to="/notices/new"
               className="inline-block mt-4 text-blue-600 hover:text-blue-700"
@@ -135,8 +146,9 @@ export function NoticesListPage() {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
-          {notices.map((notice) => (
+        <>
+          <div className="space-y-4">
+            {currentItems.map((notice) => (
             <Link
               key={notice.id}
               to={`/notices/${notice.id}`}
@@ -167,8 +179,16 @@ export function NoticesListPage() {
                 </div>
               </div>
             </Link>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </div>
   );

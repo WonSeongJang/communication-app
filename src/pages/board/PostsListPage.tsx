@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePostStore } from '@/store/postStore';
+import { usePagination } from '@/hooks/usePagination';
+import { Pagination } from '@/components/common/Pagination';
 
 export function PostsListPage() {
   const { posts, isLoading, error, fetchPosts, searchPosts } = usePostStore();
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Pagination
+  const { currentPage, totalPages, currentItems, handlePageChange, resetPage } = usePagination({
+    items: posts,
+    itemsPerPage: 10,
+  });
 
   useEffect(() => {
     fetchPosts();
@@ -18,10 +26,11 @@ export function PostsListPage() {
       } else {
         fetchPosts();
       }
+      resetPage(); // Reset to first page when search changes
     }, 300); // 300ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery, searchPosts, fetchPosts]);
+  }, [searchQuery, searchPosts, fetchPosts, resetPage]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -114,17 +123,22 @@ export function PostsListPage() {
       {/* Posts List */}
       {posts.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-gray-500 text-lg">아직 게시글이 없습니다.</p>
-          <Link
-            to="/posts/new"
-            className="inline-block mt-4 text-blue-600 hover:text-blue-700"
-          >
-            첫 게시글을 작성해보세요 →
-          </Link>
+          <p className="text-gray-500 text-lg">
+            {searchQuery ? '검색 결과가 없습니다.' : '아직 게시글이 없습니다.'}
+          </p>
+          {!searchQuery && (
+            <Link
+              to="/posts/new"
+              className="inline-block mt-4 text-blue-600 hover:text-blue-700"
+            >
+              첫 게시글을 작성해보세요 →
+            </Link>
+          )}
         </div>
       ) : (
-        <div className="space-y-4">
-          {posts.map((post) => (
+        <>
+          <div className="space-y-4">
+            {currentItems.map((post) => (
             <Link
               key={post.id}
               to={`/posts/${post.id}`}
@@ -145,8 +159,16 @@ export function PostsListPage() {
                 </div>
               </div>
             </Link>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </div>
   );
