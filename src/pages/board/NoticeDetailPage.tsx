@@ -45,7 +45,7 @@ export function NoticeDetailPage() {
 
     try {
       await deleteNotice(notice.id);
-      navigate('/notices');
+      navigate('/notices', { replace: true });
     } catch (error) {
       // Error is handled by the store
     }

@@ -33,7 +33,7 @@ export function PostDetailPage() {
     setIsDeleting(true);
     try {
       await deletePost(selectedPost.id, user.id, user.role);
-      navigate('/posts');
+      navigate('/posts', { replace: true });
     } catch (error) {
       console.error('게시글 삭제 실패:', error);
       // Error is handled by the store
