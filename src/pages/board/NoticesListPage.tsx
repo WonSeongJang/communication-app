@@ -183,7 +183,8 @@ export function NoticesListPage() {
                     <td className="px-4 py-3">
                       <Link
                         to={`/notices/${notice.id}`}
-                        className="text-gray-900 hover:text-blue-600 font-medium"
+                        className="text-gray-900 hover:text-blue-600 font-medium block truncate max-w-md"
+                        title={notice.title}
                       >
                         {notice.title}
                       </Link>
@@ -217,7 +218,7 @@ export function NoticesListPage() {
                       📌
                     </span>
                   )}
-                  <h2 className="text-base font-semibold text-gray-900 flex-1">
+                  <h2 className="text-base font-semibold text-gray-900 flex-1 truncate" title={notice.title}>
                     {notice.title}
                   </h2>
                 </div>

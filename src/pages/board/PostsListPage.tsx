@@ -168,7 +168,8 @@ export function PostsListPage() {
                     <td className="px-4 py-3">
                       <Link
                         to={`/posts/${post.id}`}
-                        className="text-gray-900 hover:text-blue-600 font-medium"
+                        className="text-gray-900 hover:text-blue-600 font-medium block truncate max-w-md"
+                        title={post.title}
                       >
                         {post.title}
                       </Link>
@@ -194,10 +195,10 @@ export function PostsListPage() {
                 className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start gap-3 mb-2">
-                  <span className="text-xs text-gray-500 font-medium pt-1">
+                  <span className="text-xs text-gray-500 font-medium pt-1 flex-shrink-0">
                     #{posts.length - ((currentPage - 1) * 10 + index)}
                   </span>
-                  <h2 className="text-base font-semibold text-gray-900 flex-1">
+                  <h2 className="text-base font-semibold text-gray-900 flex-1 truncate" title={post.title}>
                     {post.title}
                   </h2>
                 </div>
