@@ -115,7 +115,7 @@ export function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-2">
             <p className="text-sm text-gray-600">
               계정이 없으신가요?{' '}
               <Link
@@ -123,6 +123,14 @@ export function LoginPage() {
                 className="font-medium text-blue-600 hover:text-blue-500"
               >
                 회원가입
+              </Link>
+            </p>
+            <p className="text-sm text-gray-600">
+              <Link
+                to="/auth/reset-password"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                비밀번호를 잊으셨나요?
               </Link>
             </p>
           </div>

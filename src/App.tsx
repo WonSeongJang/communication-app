@@ -5,6 +5,9 @@ import { MainLayout } from './components/layout/MainLayout';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
+import { ChangePasswordPage } from './pages/auth/ChangePasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { UpdatePasswordPage } from './pages/auth/UpdatePasswordPage';
 import { HomePage } from './pages/HomePage';
 import { AdminPage } from './pages/AdminPage';
 import { NoticesListPage } from './pages/board/NoticesListPage';
@@ -32,6 +35,8 @@ function App() {
         {/* Public Routes */}
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/signup" element={<SignupPage />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/auth/update-password" element={<UpdatePasswordPage />} />
 
         {/* Protected Routes */}
         <Route
@@ -61,7 +66,9 @@ function App() {
           <Route path="donations" element={<DonationsPage />} />
           <Route path="donations/manage" element={<DonationManagePage />} />
 
+          {/* Profile Routes */}
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="profile/change-password" element={<ChangePasswordPage />} />
         </Route>
 
         {/* Catch all */}

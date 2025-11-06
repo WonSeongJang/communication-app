@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 
 export function ProfilePage() {
@@ -281,21 +281,29 @@ export function ProfilePage() {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+          <Link
+            to="/profile/change-password"
+            className="text-sm text-blue-600 hover:text-blue-700 underline"
           >
-            취소
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting || isLoading}
-            className="px-6 py-2 bg-blue-600 !text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? '저장 중...' : '저장'}
-          </button>
+            비밀번호 변경
+          </Link>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting || isLoading}
+              className="px-6 py-2 bg-blue-600 !text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? '저장 중...' : '저장'}
+            </button>
+          </div>
         </div>
       </form>
     </div>
