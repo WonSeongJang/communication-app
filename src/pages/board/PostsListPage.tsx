@@ -14,11 +14,13 @@ export function PostsListPage() {
     itemsPerPage: 10,
   });
 
+  // Fetch posts on initial mount only
   useEffect(() => {
     fetchPosts();
-  }, [fetchPosts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Debounced search
+  // Debounced search - only depends on searchQuery
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchQuery.trim()) {
@@ -30,7 +32,8 @@ export function PostsListPage() {
     }, 300); // 300ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery, searchPosts, fetchPosts, resetPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

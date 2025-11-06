@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 
 interface UsePaginationProps<T> {
   items: T[];
@@ -18,19 +18,19 @@ export function usePagination<T>({ items, itemsPerPage = 10 }: UsePaginationProp
     return items.slice(startIndex, endIndex);
   }, [items, currentPage, itemsPerPage]);
 
-  // Handle page change
-  const handlePageChange = (page: number) => {
+  // Handle page change - memoized to prevent infinite loops
+  const handlePageChange = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
       // Scroll to top when page changes
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  };
+  }, [totalPages]);
 
-  // Reset to first page when items change (e.g., after search)
-  const resetPage = () => {
+  // Reset to first page - memoized to prevent infinite loops
+  const resetPage = useCallback(() => {
     setCurrentPage(1);
-  };
+  }, []);
 
   return {
     currentPage,

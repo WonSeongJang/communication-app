@@ -16,11 +16,13 @@ export function NoticesListPage() {
     itemsPerPage: 10,
   });
 
+  // Fetch notices on initial mount only
   useEffect(() => {
     fetchNotices();
-  }, [fetchNotices]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Debounced search
+  // Debounced search - only depends on searchQuery
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchQuery.trim()) {
@@ -32,7 +34,8 @@ export function NoticesListPage() {
     }, 300); // 300ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery, searchNotices, fetchNotices, resetPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
