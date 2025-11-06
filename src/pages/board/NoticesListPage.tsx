@@ -133,7 +133,7 @@ export function NoticesListPage() {
         )}
       </div>
 
-      {/* Notices List */}
+      {/* Notices Table */}
       {notices.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-gray-500 text-lg">
@@ -150,38 +150,86 @@ export function NoticesListPage() {
         </div>
       ) : (
         <>
-          <div className="space-y-4">
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                    상태
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    제목
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                    작성자
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                    작성일
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
+                    조회
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentItems.map((notice) => (
+                  <tr key={notice.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 whitespace-nowrap text-center">
+                      {notice.is_pinned && (
+                        <span className="text-lg" aria-label="고정된 공지">📌</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        to={`/notices/${notice.id}`}
+                        className="text-gray-900 hover:text-blue-600 font-medium"
+                      >
+                        {notice.title}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                      {getAuthorName()}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                      {formatDate(notice.created_at)}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-center">
+                      {notice.viewed_by.length}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
             {currentItems.map((notice) => (
-            <Link
-              key={notice.id}
-              to={`/notices/${notice.id}`}
-              className="block bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    {notice.is_pinned && (
-                      <span className="text-primary-600" aria-label="고정된 공지">
-                        📌
-                      </span>
-                    )}
-                    <h2 className="text-xl font-semibold text-gray-900">
-                      {notice.title}
-                    </h2>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
+              <Link
+                key={notice.id}
+                to={`/notices/${notice.id}`}
+                className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start gap-2 mb-2">
+                  {notice.is_pinned && (
+                    <span className="text-primary-600 flex-shrink-0" aria-label="고정된 공지">
+                      📌
+                    </span>
+                  )}
+                  <h2 className="text-base font-semibold text-gray-900 flex-1">
+                    {notice.title}
+                  </h2>
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <div className="flex items-center gap-2">
                     <span>{getAuthorName()}</span>
                     <span>•</span>
                     <span>{formatDate(notice.created_at)}</span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <span aria-label="조회수">👁️</span>
-                      {notice.viewed_by.length}명 읽음
-                    </span>
                   </div>
+                  <span>👁️ {notice.viewed_by.length}</span>
                 </div>
-              </div>
-            </Link>
+              </Link>
             ))}
           </div>
 

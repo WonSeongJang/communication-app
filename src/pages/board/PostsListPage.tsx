@@ -123,7 +123,7 @@ export function PostsListPage() {
         )}
       </div>
 
-      {/* Posts List */}
+      {/* Posts Table */}
       {posts.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-gray-500 text-lg">
@@ -140,28 +140,73 @@ export function PostsListPage() {
         </div>
       ) : (
         <>
-          <div className="space-y-4">
-            {currentItems.map((post) => (
-            <Link
-              key={post.id}
-              to={`/posts/${post.id}`}
-              className="block bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                    번호
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    제목
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                    작성자
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                    작성일
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentItems.map((post, index) => (
+                  <tr key={post.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-center">
+                      {posts.length - ((currentPage - 1) * 10 + index)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        to={`/posts/${post.id}`}
+                        className="text-gray-900 hover:text-blue-600 font-medium"
+                      >
+                        {post.title}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                      {post.author?.name} ({post.author?.generation}기)
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                      {formatDate(post.created_at)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {currentItems.map((post, index) => (
+              <Link
+                key={post.id}
+                to={`/posts/${post.id}`}
+                className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start gap-3 mb-2">
+                  <span className="text-xs text-gray-500 font-medium pt-1">
+                    #{posts.length - ((currentPage - 1) * 10 + index)}
+                  </span>
+                  <h2 className="text-base font-semibold text-gray-900 flex-1">
                     {post.title}
                   </h2>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span>
-                      {post.author?.name} ({post.author?.generation}기)
-                    </span>
-                    <span>•</span>
-                    <span>{formatDate(post.created_at)}</span>
-                  </div>
                 </div>
-              </div>
-            </Link>
+                <div className="flex items-center text-xs text-gray-500 ml-8">
+                  <span>{post.author?.name} ({post.author?.generation}기)</span>
+                  <span className="mx-2">•</span>
+                  <span>{formatDate(post.created_at)}</span>
+                </div>
+              </Link>
             ))}
           </div>
 
