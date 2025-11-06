@@ -33,7 +33,6 @@ export const PendingUsersTable = () => {
     bulkApprove,
     bulkReject,
     toggleUserSelection,
-    selectAll,
     clearSelection,
     clearError,
   } = useApprovalStore();
@@ -196,8 +195,9 @@ export const PendingUsersTable = () => {
           </div>
         ) : (
           // Table with data
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left">
@@ -326,14 +326,15 @@ export const PendingUsersTable = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
 
-          {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </div>
 
