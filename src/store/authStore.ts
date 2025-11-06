@@ -8,6 +8,7 @@ interface AuthStore extends AuthState {
   setLoading: (loading: boolean) => void;
   signOut: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  updateProfile: (userId: string, data: Partial<User>) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -80,6 +81,32 @@ export const useAuthStore = create<AuthStore>((set) => ({
       window.location.href = '/auth/login';
     } catch (error) {
       console.error('Sign out failed:', error);
+    }
+  },
+
+  updateProfile: async (userId: string, data: Partial<User>) => {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update(data)
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      // Fetch updated user data
+      const { data: userData, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Update user in store
+      set({ user: userData });
+    } catch (error) {
+      console.error('Profile update failed:', error);
+      throw error;
     }
   },
 }));

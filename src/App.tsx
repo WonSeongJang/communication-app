@@ -15,7 +15,7 @@ import { PostsListPage } from './pages/board/PostsListPage';
 import { PostDetailPage } from './pages/board/PostDetailPage';
 import { PostCreatePage } from './pages/board/PostCreatePage';
 import { PostEditPage } from './pages/board/PostEditPage';
-import { ProfilePage } from './pages/ProfilePage';
+import { ProfilePage } from './pages/profile/ProfilePage';
 import { DonationsPage } from './pages/donation/DonationsPage';
 import { DonationManagePage } from './pages/donation/DonationManagePage';
 
