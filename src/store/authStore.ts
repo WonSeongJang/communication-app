@@ -1,10 +1,11 @@
 import { create } from 'zustand';
+import type { Session } from '@supabase/supabase-js';
 import { supabase, type User } from '@/lib/supabase';
 import type { AuthState } from '@/types';
 
 interface AuthStore extends AuthState {
   setUser: (user: User | null) => void;
-  setSession: (session: any) => void;
+  setSession: (session: Session | null) => void;
   setLoading: (loading: boolean) => void;
   signOut: () => Promise<void>;
   checkAuth: () => Promise<void>;

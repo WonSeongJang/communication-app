@@ -1,12 +1,17 @@
 import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, Navigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 
 export function EmailVerificationPage() {
   const [searchParams] = useSearchParams();
-  const email = searchParams.get('email') || '';
+  const email = searchParams.get('email');
   const [isResending, setIsResending] = useState(false);
   const [message, setMessage] = useState('');
+
+  // Redirect to signup if email parameter is missing
+  if (!email || email.trim() === '') {
+    return <Navigate to="/auth/signup" replace />;
+  }
 
   const handleResendEmail = async () => {
     if (!email) {

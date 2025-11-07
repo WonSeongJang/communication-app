@@ -66,7 +66,7 @@ class ApprovalService {
 
   /**
    * Fetch all users with status='pending', ordered by created_at DESC
-   * Also fetches email verification status from auth.users
+   * Email verification status is now stored in users table
    *
    * @returns Array of pending users awaiting approval
    * @throws Error if database query fails
@@ -75,7 +75,7 @@ class ApprovalService {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, email, name, generation, occupation, phone, messenger_id, profile_image, created_at')
+        .select('id, email, name, generation, occupation, phone, messenger_id, profile_image, created_at, email_confirmed_at')
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
@@ -83,22 +83,7 @@ class ApprovalService {
         throw new Error(`Failed to fetch pending users: ${error.message}`);
       }
 
-      if (!data || data.length === 0) {
-        return [];
-      }
-
-      // Fetch email verification status for each user from auth.users
-      const usersWithEmailStatus = await Promise.all(
-        data.map(async (user) => {
-          const { data: authData } = await supabase.auth.admin.getUserById(user.id);
-          return {
-            ...user,
-            email_confirmed_at: authData.user?.email_confirmed_at || null,
-          };
-        })
-      );
-
-      return usersWithEmailStatus;
+      return data || [];
     } catch (error) {
       if (error instanceof Error) {
         throw error;

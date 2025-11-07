@@ -25,6 +25,11 @@ export function LoginPage() {
 
       if (error) throw error;
 
+      // Check if user exists
+      if (!authData.user) {
+        throw new Error('사용자 정보를 찾을 수 없습니다.');
+      }
+
       // Check email verification
       if (!authData.user.email_confirmed_at) {
         await supabase.auth.signOut();
