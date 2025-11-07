@@ -5,6 +5,7 @@ import { MainLayout } from './components/layout/MainLayout';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
+import { EmailVerificationPage } from './pages/auth/EmailVerificationPage';
 import { ChangePasswordPage } from './pages/auth/ChangePasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { UpdatePasswordPage } from './pages/auth/UpdatePasswordPage';
@@ -35,6 +36,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/signup" element={<SignupPage />} />
+        <Route path="/auth/verify-email" element={<EmailVerificationPage />} />
         <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         <Route path="/auth/update-password" element={<UpdatePasswordPage />} />
 

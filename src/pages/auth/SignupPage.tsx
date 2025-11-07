@@ -68,11 +68,8 @@ export function SignupPage() {
 
       if (profileError) throw profileError;
 
-      // Show success message and redirect
-      alert(
-        '회원가입이 완료되었습니다. 관리자의 승인을 기다려주세요.'
-      );
-      navigate('/auth/login');
+      // Redirect to email verification page
+      navigate(`/auth/verify-email?email=${encodeURIComponent(formData.email.trim().toLowerCase())}`);
     } catch (err: any) {
       setError(err.message || '회원가입에 실패했습니다.');
     } finally {
