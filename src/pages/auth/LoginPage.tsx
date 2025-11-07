@@ -18,12 +18,27 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
+
+      // Check user status from database
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('status')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (userError) throw userError;
+
+      // Block login if user is not active
+      if (userData.status !== 'active') {
+        await supabase.auth.signOut();
+        throw new Error('관리자의 승인을 기다리고 있습니다. 승인 후 로그인할 수 있습니다.');
+      }
 
       // rememberMe는 Supabase Client의 persistSession 설정으로 제어됨
       // 기본적으로 로그인 상태는 유지됨 (refresh token 사용)

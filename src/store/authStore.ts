@@ -45,6 +45,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
         if (error) throw error;
 
+        // Check if user status is active
+        if (userData.status !== 'active') {
+          // Sign out if user is not active
+          await supabase.auth.signOut();
+          set({
+            user: null,
+            session: null,
+            isAuthenticated: false,
+          });
+          return;
+        }
+
         set({
           user: userData,
           session,
