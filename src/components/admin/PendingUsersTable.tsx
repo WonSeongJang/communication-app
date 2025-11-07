@@ -231,6 +231,9 @@ export const PendingUsersTable = () => {
                     이메일
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    이메일 확인
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     가입일
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -296,6 +299,19 @@ export const PendingUsersTable = () => {
                     {/* Email */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm text-gray-500">{user.email}</span>
+                    </td>
+
+                    {/* Email Verification Status */}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.email_confirmed_at ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          ✓ 확인됨
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          ⏳ 미확인
+                        </span>
+                      )}
                     </td>
 
                     {/* Created At */}

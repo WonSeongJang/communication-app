@@ -36,6 +36,17 @@ export const useAuthStore = create<AuthStore>((set) => ({
       } = await supabase.auth.getSession();
 
       if (session) {
+        // Check email verification
+        if (!session.user.email_confirmed_at) {
+          await supabase.auth.signOut();
+          set({
+            user: null,
+            session: null,
+            isAuthenticated: false,
+          });
+          return;
+        }
+
         // Fetch user profile data from database
         const { data: userData, error } = await supabase
           .from('users')

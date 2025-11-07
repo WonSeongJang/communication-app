@@ -25,6 +25,12 @@ export function LoginPage() {
 
       if (error) throw error;
 
+      // Check email verification
+      if (!authData.user.email_confirmed_at) {
+        await supabase.auth.signOut();
+        throw new Error('이메일 인증이 필요합니다. 이메일을 확인해주세요.');
+      }
+
       // Check user status from database
       const { data: userData, error: userError } = await supabase
         .from('users')

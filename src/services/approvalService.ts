@@ -13,6 +13,7 @@ export interface PendingUser {
   messenger_id: string | null;
   profile_image: string | null;
   created_at: string;
+  email_confirmed_at: string | null;
 }
 
 /**
@@ -65,6 +66,7 @@ class ApprovalService {
 
   /**
    * Fetch all users with status='pending', ordered by created_at DESC
+   * Also fetches email verification status from auth.users
    *
    * @returns Array of pending users awaiting approval
    * @throws Error if database query fails
@@ -81,7 +83,22 @@ class ApprovalService {
         throw new Error(`Failed to fetch pending users: ${error.message}`);
       }
 
-      return data || [];
+      if (!data || data.length === 0) {
+        return [];
+      }
+
+      // Fetch email verification status for each user from auth.users
+      const usersWithEmailStatus = await Promise.all(
+        data.map(async (user) => {
+          const { data: authData } = await supabase.auth.admin.getUserById(user.id);
+          return {
+            ...user,
+            email_confirmed_at: authData.user?.email_confirmed_at || null,
+          };
+        })
+      );
+
+      return usersWithEmailStatus;
     } catch (error) {
       if (error instanceof Error) {
         throw error;
